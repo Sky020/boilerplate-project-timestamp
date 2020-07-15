@@ -1,6 +1,3 @@
-// server.js
-// where your node app starts
-
 // init project
 var express = require('express');
 var app = express();
@@ -24,6 +21,14 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
+app.route('/api/timestamp/:date_string?').get((req,res) => {
+  const date = isNaN(req.params.date_string) ? (req.params.date_string === undefined ? new Date() : new Date(req.params.date_string)) : new Date(Number(req.params.date_string));
+  if (date.toUTCString() !== "Invalid Date") {
+    res.json({"unix": date.getTime(), "utc" : date.toUTCString()});
+  } else {
+    res.json({"error": "Invalid Date"});
+  }
+})
 
 
 // listen for requests :)
